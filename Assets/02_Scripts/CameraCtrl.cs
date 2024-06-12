@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CameraCtrl : MonoBehaviour
 {
     [SerializeField] Transform targetTr;
     [SerializeField] float distance = 10.0f;
+    [SerializeField] float zoomSpd = 200.0f;
+
     [SerializeField] float xSpeed = 120.0f;
     [SerializeField] float ySpeed = 120.0f;
 
@@ -13,7 +16,7 @@ public class CameraCtrl : MonoBehaviour
     [SerializeField] float yMaxLimit = 80f;  // 카메라의 최대 Y축 각도
 
     private float rotX = 0.0f; // X축 회전 각도
-    private float rotY = 0.0f; // Y축 회전 각도
+    private float rotY = 30.0f; // Y축 회전 각도
 
     private Transform camTr;
 
@@ -34,6 +37,22 @@ public class CameraCtrl : MonoBehaviour
         rotX += Input.GetAxis("Mouse X") * xSpeed * Time.deltaTime;
         rotY -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
 
+        float wheel = Input.GetAxis("Mouse ScrollWheel");
+
+        if (wheel != 0.0f)
+        {
+            distance -= wheel * zoomSpd * Time.deltaTime;
+            Debug.Log(distance);
+            if (distance > 8)
+            {
+                distance = 8;
+            }
+            else if (distance < 1)
+            {
+                distance = 1;
+            }
+        }
+
 
         // Y축 각도 제한
         rotY = ClampAngle(rotY, yMinLimit, yMaxLimit);
@@ -47,6 +66,7 @@ public class CameraCtrl : MonoBehaviour
         // 카메라 위치와 회전 적용
         camTr.rotation = rotation;
         camTr.position = position;
+
 
     }
     float ClampAngle(float angle, float min, float max)
