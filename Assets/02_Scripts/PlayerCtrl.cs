@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,6 +16,9 @@ public class PlayerCtrl : MonoBehaviour
     private bool isMoving;
     private bool isjumping;
     private bool jumped;
+
+    [SerializeField] float power = 10f;
+
 
     private State animState = State.IDLE;
     private Animator animator;
@@ -45,6 +49,7 @@ public class PlayerCtrl : MonoBehaviour
     {
         Move();
         Jump();
+        Attack();
     }
 
     void FixedUpdate()
@@ -54,7 +59,7 @@ public class PlayerCtrl : MonoBehaviour
         if (isMoving)
         {
             //rb.AddRelativeForce(moveSpd * 100 * Time.fixedDeltaTime * Vector3.forward);
-            Debug.Log(moveDirection.magnitude);
+            //Debug.Log(moveDirection.magnitude);
             rb.MovePosition(rb.position + moveDirection * moveSpd * Time.fixedDeltaTime);
             animState = State.Run;
         }
@@ -63,12 +68,12 @@ public class PlayerCtrl : MonoBehaviour
             animState = State.IDLE;
         }
 
-        if (jumped) 
+        if (isjumping)
         {
             animState = State.JUMP;
             rb.AddRelativeForce(Vector3.up * jumpSpd * 2000 * Time.fixedDeltaTime);
-            jumped = false;
-            
+            isjumping = false;
+
         }
 
         ExecuteStateAction();
@@ -78,7 +83,12 @@ public class PlayerCtrl : MonoBehaviour
     {
         if (!jumped) 
         {
-        
+            return;
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Walkable"))
+        {
+            jumped = false;
+            Debug.Log("Reached walkable Obj!");
         }
     }
 
@@ -95,8 +105,6 @@ public class PlayerCtrl : MonoBehaviour
 
         // 이동 방향이 0이 아닌지 확인
         isMoving = moveDir != Vector3.zero;
-
-        Debug.Log("isMoving: " + isMoving);
 
         // 이동 방향을 저장
         moveDirection = moveDir;
@@ -118,11 +126,18 @@ public class PlayerCtrl : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !jumped)
         {
-            Debug.Log("Jumped");
             jumped = true;
             isjumping = true;
+        }
+    }
+
+    void Attack()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+
         }
     }
     void ReceiveInput()
