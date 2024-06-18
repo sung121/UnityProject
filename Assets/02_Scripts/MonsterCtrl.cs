@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MosnterCtrl : MonoBehaviour
+public class MonsterCtrl : MonoBehaviour
 {
     [SerializeField] Transform targetTr;
     [SerializeField] Transform monsterTr;
@@ -12,6 +12,9 @@ public class MosnterCtrl : MonoBehaviour
     NavMeshAgent agent;
 
     float distance;
+
+    public float currentHp = 100;
+    public float maxHp = 100;
 
     enum State
     {

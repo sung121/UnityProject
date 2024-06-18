@@ -16,16 +16,21 @@ public class PlayerCtrl : MonoBehaviour
     private bool isMoving;
     private bool isjumping;
     private bool jumped;
-
-    [SerializeField] float power = 10f;
-
+    private bool isAttacking = false;
 
     private State animState = State.IDLE;
     private Animator animator;
 
+    [SerializeField] private float currentHp = 100;
+    [SerializeField] private float maxHp = 100;
+    [SerializeField] public float currentPower = 10f;
+    
+
+
     private readonly int hashRun = Animator.StringToHash("Run");
     private readonly int hashJump = Animator.StringToHash("Jump");
     private readonly int hashFall = Animator.StringToHash("Fall");
+    private readonly int hashPunch = Animator.StringToHash("Punch");
 
     public enum State
     {
@@ -36,7 +41,6 @@ public class PlayerCtrl : MonoBehaviour
         ATTACK,
         DIE
     }
-
 
     void Start()
     {
@@ -50,6 +54,7 @@ public class PlayerCtrl : MonoBehaviour
         Move();
         Jump();
         Attack();
+        ExecuteStateAction();
     }
 
     void FixedUpdate()
@@ -75,8 +80,6 @@ public class PlayerCtrl : MonoBehaviour
             isjumping = false;
 
         }
-
-        ExecuteStateAction();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -92,6 +95,11 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
     void Move()
     {
         // 이동 방향 계산
@@ -101,10 +109,17 @@ public class PlayerCtrl : MonoBehaviour
         cameraForward = cameraForward.normalized;
 
         Vector3 moveDir = (cameraForward * Input.GetAxis("Vertical") + camera.transform.right * Input.GetAxis("Horizontal")).normalized;
-        
+
 
         // 이동 방향이 0이 아닌지 확인
-        isMoving = moveDir != Vector3.zero;
+        if (moveDir == Vector3.zero || (isAttacking == true) )
+        {
+            isMoving = false;
+        }
+        else
+        {
+            isMoving = true;
+        }
 
         // 이동 방향을 저장
         moveDirection = moveDir;
@@ -126,7 +141,7 @@ public class PlayerCtrl : MonoBehaviour
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !jumped)
+        if (Input.GetKeyDown(KeyCode.Space) && !jumped && (!isAttacking))
         {
             jumped = true;
             isjumping = true;
@@ -137,12 +152,16 @@ public class PlayerCtrl : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-
+            isAttacking = true;
+            isMoving = false;
+            isjumping = false;
+            isAttacking = true;
+            animState = State.ATTACK;
         }
-    }
-    void ReceiveInput()
-    {
-        
+        if (Input.GetMouseButtonUp(0))
+        {
+            isAttacking = false;
+        }
     }
 
     void ExecuteStateAction()
@@ -166,6 +185,12 @@ public class PlayerCtrl : MonoBehaviour
             case State.FALL:
                 animator.SetBool(hashJump, false);
                 animator.SetBool(hashFall, true);
+
+                break;
+
+            case State.ATTACK:
+                animator.SetBool(hashPunch, true);
+
 
                 break;
             default:
