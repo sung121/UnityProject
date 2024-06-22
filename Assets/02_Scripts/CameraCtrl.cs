@@ -42,7 +42,6 @@ public class CameraCtrl : MonoBehaviour
         if (wheel != 0.0f)
         {
             distance -= wheel * zoomSpd * Time.deltaTime;
-            Debug.Log(distance);
             if (distance > 8)
             {
                 distance = 8;
