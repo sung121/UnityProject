@@ -19,7 +19,7 @@ public class PunchCtrl : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Entity"))
         {
-            other.gameObject.GetComponent<MonsterCtrl>().currentHp -= power + playerPower;
+            other.gameObject.GetComponent<BaseMonster>().Hit(power + playerPower);
             Debug.Log("Punch Trigger!" + ++tmp);
         }
     }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,7 +26,6 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField] private float currentHp = 100;
     [SerializeField] private float maxHp = 100;
     [SerializeField] public float currentPower = 10f;
-    
 
 
     private readonly int hashRun = Animator.StringToHash("Run");
@@ -64,9 +63,9 @@ public class PlayerCtrl : MonoBehaviour
             isJumping = false;
             isFalling = true;
             animator.SetBool(hashRun, false);
-            Debug.Log("¶³¾îÁö´Â Áß");
+            Debug.Log("ë–¨ì–´ì§€ëŠ” ì¤‘");
         }
-        // ¹°¸® ±â¹İ ÀÌµ¿ Ã³¸®
+        // ë¬¼ë¦¬ ê¸°ë°˜ ì´ë™ ì²˜ë¦¬
 
         if (isMoving)
         {
@@ -87,7 +86,7 @@ public class PlayerCtrl : MonoBehaviour
             return;
         }
         Jump();
-        if (isJumping || isFalling) 
+        if (isJumping || isFalling)
         {
             if (Input.GetKeyUp(KeyCode.W) ||
                 Input.GetKeyUp(KeyCode.A) ||
@@ -107,7 +106,7 @@ public class PlayerCtrl : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+
         if (collision.gameObject.layer == LayerMask.NameToLayer("Walkable"))
         {
             jumped = false;
@@ -132,10 +131,10 @@ public class PlayerCtrl : MonoBehaviour
 
     float previousInputVer = 0;
     float previousInputHor = 0;
-    
+
     float currentInputVer = 0;
     float currentInputHor = 0;
-    
+
     float threshold = 0.9f;
     void Move()
     {
@@ -148,10 +147,10 @@ public class PlayerCtrl : MonoBehaviour
             isMoving = false;
         }
 
-        // ÀÌµ¿ ¹æÇâ °è»ê
-        
+        // ì´ë™ ë°©í–¥ ê³„ì‚°
+
         Vector3 cameraForward = camera.transform.forward;
-        cameraForward.y = 0; // Ä«¸Ş¶óÀÇ yÃà È¸ÀüÀ» Á¦°ÅÇÏ¿© ¼öÆò ¹æÇâÀ¸·Î ¼³Á¤
+        cameraForward.y = 0; // ì¹´ë©”ë¼ì˜ yì¶• íšŒì „ì„ ì œê±°í•˜ì—¬ ìˆ˜í‰ ë°©í–¥ìœ¼ë¡œ ì„¤ì •
         cameraForward = cameraForward.normalized;
 
 
@@ -160,11 +159,11 @@ public class PlayerCtrl : MonoBehaviour
 
         //Debug.Log("CurrentInputVer: " + currentInputVer);
         //Debug.Log("CurrentInputHor: " + currentInputHor);
-        // ÇöÀç ÀÔ·Â°ªÀÌ 0 &&
-        // ÇöÀç ÀÔ·Â°ªÀÌ ÀÌÀü ÀÔ·Â°ª°úÀÇ Â÷ÀÌ°¡ 0.1º¸´Ù Å¬ °æ¿ì(Áï ÀÔ·Â°ª º¯È­°¡ Å¬ °æ¿ì)
+        // í˜„ì¬ ì…ë ¥ê°’ì´ 0 &&
+        // í˜„ì¬ ì…ë ¥ê°’ì´ ì´ì „ ì…ë ¥ê°’ê³¼ì˜ ì°¨ì´ê°€ 0.1ë³´ë‹¤ í´ ê²½ìš°(ì¦‰ ì…ë ¥ê°’ ë³€í™”ê°€ í´ ê²½ìš°)
         if (currentInputHor == 0 && Mathf.Abs(currentInputHor - previousInputHor) > threshold)
         {
-            // ÀÌÀü ÀÔ·Â °ª À¯Áö
+            // ì´ì „ ì…ë ¥ ê°’ ìœ ì§€
             currentInputHor = previousInputHor;
         }
         else
@@ -175,7 +174,7 @@ public class PlayerCtrl : MonoBehaviour
 
         if (currentInputVer == 0 && Mathf.Abs(currentInputVer - previousInputVer) > threshold)
         {
-            // ÀÌÀü ÀÔ·Â °ª À¯Áö
+            // ì´ì „ ì…ë ¥ ê°’ ìœ ì§€
             currentInputVer = previousInputVer;
         }
         else
@@ -199,10 +198,10 @@ public class PlayerCtrl : MonoBehaviour
             isMoving = true;
         }
 
-        // ÀÌµ¿ ¹æÇâÀ» ÀúÀå
+        // ì´ë™ ë°©í–¥ì„ ì €ì¥
         moveDirection = moveDir;
 
-        // ÇÃ·¹ÀÌ¾î È¸Àü ¼³Á¤
+        // í”Œë ˆì´ì–´ íšŒì „ ì„¤ì •
         if (isMoving)
         {
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
@@ -232,7 +231,6 @@ public class PlayerCtrl : MonoBehaviour
             InitMoveInput();
         }
     }
-    int count = 0;
     void ExecuteStateAction()
     {
         AnimatorStateInfo animStateInfo;
@@ -321,7 +319,7 @@ public class PlayerCtrl : MonoBehaviour
             animState = State.RUN;
             Debug.Log("Run Animation");
         }
-        else 
+        else
         {
             animState = State.IDLE;
             Debug.Log("Idle Animation");

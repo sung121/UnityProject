@@ -1,49 +1,15 @@
 using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterCtrl : MonoBehaviour
+public class Zombie : BaseMonster
 {
-    [SerializeField] Transform targetTr;
-    [SerializeField] Transform monsterTr;
-
-    NavMeshAgent agent;
-
-    float distance;
-
-    public float currentHp = 100;
-    public float maxHp = 100;
-
-    enum State
+    protected override IEnumerator CheckMonsterState()
     {
-        IDLE,
-        TRACE,
-        TRACE_RUN,
-        ATTACK,
-        DIE
-    }
-
-    State state = State.IDLE;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        agent = GetComponent<NavMeshAgent>();
-
-        StartCoroutine(CheckMosnterState());   
-        StartCoroutine(MonsterAction());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    IEnumerator CheckMosnterState()
-    {
-        while (true) 
+        while (true)
         {
             distance = (targetTr.position - monsterTr.position).magnitude;
 
@@ -59,9 +25,14 @@ public class MonsterCtrl : MonoBehaviour
         }
     }
 
-    IEnumerator MonsterAction()
+    public override void Hit(float damage)
     {
-        while (true) 
+        currentHp -= damage;
+    }
+
+    protected override IEnumerator MonsterAction()
+    {
+        while (true)
         {
             switch (state)
             {
@@ -71,14 +42,14 @@ public class MonsterCtrl : MonoBehaviour
                     break;
                 case State.TRACE:
                     agent.SetDestination(targetTr.position);
-                    
+
                     break;
                 case State.TRACE_RUN:
                     agent.SetDestination(targetTr.position);
 
                     break;
                 case State.ATTACK:
-                    
+
                     break;
                 case State.DIE:
                     break;
@@ -87,7 +58,11 @@ public class MonsterCtrl : MonoBehaviour
 
             yield return new WaitForSeconds(0.3f);
         }
-        
     }
 
+    // Update is called once per frame
+    override protected void Update()
+    {
+        
+    }
 }
