@@ -1,14 +1,20 @@
-public class JumpState : IPlayerState
+using UnityEngine;
+
+public class JumpState : PlayerState
 {
-    public void EnterState(PlayerCtrl player)
+    public override void EnterState(BasePlayer player)
+    {;
+    }
+
+    public override void FixedUpdateState()
     {
     }
 
-    public void UpdateState(PlayerCtrl player)
+    public override void HandleInput()
     {
     }
 
-    public void ExitState(PlayerCtrl player)
+    public override void UpdateState()
     {
     }
 }

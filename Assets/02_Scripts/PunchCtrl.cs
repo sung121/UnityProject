@@ -12,6 +12,12 @@ public class PunchCtrl : MonoBehaviour
 
     void Start()
     {
+        if (GetComponentInParent<PlayerCtrl>() == null)
+        {
+            playerPower = GetComponentInParent<BasePlayer>().currentPower;
+            Debug.Log("PlayerCtrl is Null!");
+            return;
+        }
         playerPower = GetComponentInParent<PlayerCtrl>().currentPower;
     }
 

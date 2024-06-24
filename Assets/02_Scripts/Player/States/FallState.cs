@@ -1,14 +1,20 @@
-public class FallState : IPlayerState
+using UnityEngine;
+
+public class FallState : PlayerState
 {
-    public void EnterState(PlayerCtrl player)
+    public override void EnterState()
     {
     }
 
-    public void UpdateState(PlayerCtrl player)
+    public override void FixedUpdateState()
     {
     }
 
-    public void ExitState(PlayerCtrl player)
+    public override void HandleInput()
+    {
+    }
+
+    public override void UpdateState()
     {
     }
 }

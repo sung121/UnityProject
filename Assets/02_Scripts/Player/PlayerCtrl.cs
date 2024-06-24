@@ -96,8 +96,6 @@ public class PlayerCtrl : MonoBehaviour
             {
                 animator.SetBool(hashRun, false);
             }
-            ExecuteStateAction();
-            CheckState();
             return;
         }
         Move();
